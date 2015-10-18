@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+}
+
+header, section {
+  margin: 0;
+  border: 1px dotted grey;
+}
+
+header {
+  height: 5em;
+}
+
+section.content {
+  position: absolute;
+  left: 0;
+  top: 5em;
+  bottom: 0;
+  right: 0;
+}
+
+section.times {
+  position: absolute;
+  width: 10em;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+
+section.test {
+  position: absolute;
+  left: 10em;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.ball {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 10em;
+  height: 10em;
+  background: #E91E63;
+  border-radius: 100%;
+  display: none;
+}
