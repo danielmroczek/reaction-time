@@ -2,26 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Reaction Time test</title>
+  <title>Zmierz swój czas reakcji!</title>
 
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css' async>
+  <link rel="stylesheet" href="animations.css">
   <link rel="stylesheet" href="style.css">
   <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script src="main.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Mierzenie czasu Reakcji</h1>
-  </header>
-  <section class="content">
-    <section class="times">
-      <h2>Czasy</h2>
-    </section>
-    <section class="test">
-     <h1>sd</h1>
-      <button id="btnStart">Start</button>
-      <button id="btnDebug">Debug</button>
-      <div class="ball"></div>
-    </section>
+
+  <section id="main" class="overlay dark">
+    <h1>Bądź czujny...</h1>
+    <h1 id="roundName">Runda <span id="roundNumber">1</span></h1>
+    <div class="ball"></div>
   </section>
+
+  <section id="end" class="overlay">
+    <h1>Wyniki:</h1>
+<!--    <p>Data i czas rozpoczęcia testu: <span id="date"></span></p>-->
+    <ol id="resultsTable">
+      <li>0.234</li>
+      <li>0.234</li>
+      <li>0.234</li>
+    </ol>
+
+    <h2>
+      Średnio: <span id="avgTime">0.333</span>s.
+    </h2>
+
+  </section>
+
+  <section id="falstart" class="overlay alert">
+    <h1>Falstart!</h1>
+    <p>Czas będzie policzony jako 1s.</p>
+    <h3>Naciśnij dowolny klawisz aby rozpocząć kolejną rundę.</h3>
+  </section>
+
+  <section id="result" class="overlay">
+    <h1>Czas: <span id="reactionTime">0.432</span>s.</h1>
+    <h3>Naciśnij dowolny klawisz aby rozpocząć kolejną rundę.</h3>
+  </section>
+
+  <section id="intro" class="overlay">
+    <h1>Program do mierzenia czasu reakcji</h1>
+    <p>Naciśnij dowolny przycisk (klawiatury lub myszy) gdy zobaczysz kolorowy obiekt.</p>
+    <p>Po <span id="rounds">10</span> rundach zobaczysz wyniki.</p>
+    <h3>Naciśnij dowolny klawisz aby rozpocząć.</h3>
+
+    <p class="footer">&copy; 2015, Tomasz Fajfer</p>
+  </section>
+
 </body>
 </html>
