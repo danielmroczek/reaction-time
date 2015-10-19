@@ -46,7 +46,7 @@ RT.MainController = function (options) {
     resultsArray = [];
     beginDate = new Date();
     $('#end').hide();
-    $('#intro').fadeOut('slow', $('#intro').hide);
+    $('#intro').fadeOut('fast', $('#intro').hide);
     startRound(round);
   };
 
