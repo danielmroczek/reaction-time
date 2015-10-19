@@ -112,8 +112,8 @@ RT.MainController = function (options) {
   function showObject() {
     removeDocumentHandler();
     addDocumentHandler(onReaction);
-    var maxLeft = $(window).width() - $('div.ball').width();
-    var maxTop = $(window).height() - $('div.ball').height();
+    var maxLeft = $(window).width() - $('div.ball')..outerWidth();
+    var maxTop = $(window).height() - $('div.ball').outerHeight();
     var left = random(0, maxLeft);
     var top = random(0, maxTop);
     var colours = getRandomColours(2);
@@ -170,7 +170,7 @@ RT.MainController = function (options) {
   };
 
   function getTimeout() {
-    return Math.floor(Math.random() * 6000) + 1000;
+    return Math.floor(Math.random() * 6500) + 1500;
   };
 
   function random(min, max) {
