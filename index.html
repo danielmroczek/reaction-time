@@ -23,6 +23,23 @@ website
   <script src="analytics.js"></script>
 </head>
 <body>
+  <script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '522567561242186',
+      xfbml      : true,
+      version    : 'v2.5'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
 
   <section id="main" class="overlay">
     <h1>Bądź czujny...</h1>
@@ -61,7 +78,6 @@ website
     <p>Twoje zadanie to nacisnąć dowolny przycisk (klawiatury lub myszy) gdy zobaczysz kolorowy obiekt.</p>
     <p>Po <span id="rounds">10</span> rundach zobaczysz wyniki.</p>
     <h3>Naciśnij dowolny klawisz aby rozpocząć.</h3>
-
 <!--    <p class="footer">&copy; 2015</p>-->
   </section>
 
