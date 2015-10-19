@@ -112,7 +112,7 @@ RT.MainController = function (options) {
   function showObject() {
     removeDocumentHandler();
     addDocumentHandler(onReaction);
-    var maxLeft = $(window).width() - $('div.ball')..outerWidth();
+    var maxLeft = $(window).width() - $('div.ball').outerWidth();
     var maxTop = $(window).height() - $('div.ball').outerHeight();
     var left = random(0, maxLeft);
     var top = random(0, maxTop);
