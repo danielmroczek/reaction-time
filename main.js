@@ -2,8 +2,7 @@ var RT = RT || {};
 
 RT.MainController = function (options) {
   var options = $.extend({
-    rounds: 5,
-    roundAnimationClass: 'slideOutUp'
+    rounds: 5
   }, options);
 
   var startTime = 0;
@@ -12,6 +11,27 @@ RT.MainController = function (options) {
   var timeoutHandler;
   var beginDate;
   var resultsArray = [];
+  var colours = [
+    '#F44336',
+    '#E91E63',
+    '#9C27B0',
+    '#673AB7',
+    '#3F51B5',
+    '#2196F3',
+    '#03A9F4',
+    '#00BCD4',
+    '#009688',
+    '#4CAF50',
+    '#8BC34A',
+    '#CDDC39',
+    '#FFEB3B',
+    '#FFC107',
+    '#FF9800',
+    '#FF5722',
+    '#795548',
+    '#9E9E9E',
+    '#607D8B'
+  ];
 
   this.init = function init() {
     if (options.rounds < 1) {
@@ -96,8 +116,11 @@ RT.MainController = function (options) {
     var maxTop = $(window).height() - $('div.ball').height();
     var left = random(0, maxLeft);
     var top = random(0, maxTop);
+    var colours = getRandomColours(2);
     $('div.ball').css('left', left);
     $('div.ball').css('top', top);
+    $('div.ball').css('background', colours[0]);
+    $('div.ball').css('color', colours[1]);
     $('div.ball').show();
     startTime = Date.now();
   };
@@ -123,9 +146,10 @@ RT.MainController = function (options) {
   };
 
   function restartRoundAnimation() {
-    $('#roundName').removeClass(options.roundAnimationClass);
-    $('#roundName').width($('#roundName').width());
-    $('#roundName').addClass(options.roundAnimationClass);
+    $('#roundName').css('animation-name', 'none');
+    setTimeout(function() {
+      $('#roundName').css('animation-name', '');
+    }, 4);
   };
 
   // Helper functions
@@ -146,7 +170,7 @@ RT.MainController = function (options) {
   };
 
   function getTimeout() {
-    return Math.floor(Math.random() * 10000) + 500;
+    return Math.floor(Math.random() * 6000) + 1000;
   };
 
   function random(min, max) {
@@ -157,6 +181,19 @@ RT.MainController = function (options) {
     }
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
+
+  function getRandomColours(howMany) {
+    var i = 0;
+    var chosen;
+    var result = [];
+    do {
+      chosen = random(i, colours.length);
+      colours[i] = colours.splice(chosen, 1, colours[i])[0];
+      result.push(colours[i]);
+      i += 1;
+    } while (i < howMany);
+    return result;
+  }
 }
 
 $(function () {
