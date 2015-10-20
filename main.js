@@ -11,6 +11,7 @@ RT.MainController = function (options) {
   var timeoutHandler;
   var beginDate;
   var resultsArray = [];
+  var historyController;
   var colours = [
     '#F44336',
     '#E91E63',
@@ -38,13 +39,14 @@ RT.MainController = function (options) {
       options.rounds = 1;
     }
     $('#rounds').text(options.rounds);
+    historyController = new RT.ScoreHistoryController();
     addDocumentHandler(startGame);
   };
 
   function startGame() {
     round = 1;
     resultsArray = [];
-    beginDate = new Date();
+    beginDate = Date.now();
     $('#end').hide();
     $('#intro').fadeOut('fast', $('#intro').hide);
     startRound(round);
@@ -84,6 +86,12 @@ RT.MainController = function (options) {
       sum += result.time;
     });
     var avg = Math.round((sum / resultsArray.length) * 1000) / 1000;
+    historyController.saveScore({
+      date: beginDate,
+      results: resultsArray,
+      avg: avg
+    });
+
     $('#avgTime').text(avg);
     $('#end').show();
     addDocumentHandler(backToIntro);
