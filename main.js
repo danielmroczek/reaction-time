@@ -94,7 +94,8 @@ RT.MainController = function (options) {
 
     $('#avgTime').text(avg);
     $('#end').show();
-    addDocumentHandler(backToIntro);
+    $('.button.repeat').one('click', backToIntro);
+//    addDocumentHandler(backToIntro);
   };
 
   function backToIntro() {

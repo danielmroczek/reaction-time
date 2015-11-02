@@ -1,48 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Zmierz swój czas reakcji!</title>
   <meta name="author" content="Daniel Mroczek">
-  <meta property="og:title"
-content="Zmierz swój czas reakcji!" />
-  <meta property="og:url"
-content="http://czasreakcji.tk/" />
+  <meta property="og:title" content="Zmierz swój czas reakcji!" />
+  <meta property="og:url" content="http://czasreakcji.tk/" />
   <meta property="og:description" content="Program do mierzenia czasu reakcji. Zrób test i zobacz jak szybko reagujesz." />
   <meta property="fb:app_id" content="522567561242186" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="pl_PL" />
-  <meta property="og:image" content="http://czasreakcji.tk/logo.png" />
-
-website
+  <meta property="og:image" content="http://czasreakcji.tk/logo.png" /> website
   <link rel="icon" type="image/png" href="favicon.png" />
   <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css' async>
   <link rel="stylesheet" href="animations.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="buttons.css">
   <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script src="scoreHistory.js"></script>
   <script src="deepLinking.js"></script>
   <script src="main.js"></script>
   <script src="analytics.js"></script>
 </head>
+
 <body>
   <script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '522567561242186',
-      xfbml      : true,
-      version    : 'v2.5'
-    });
-  };
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: '522567561242186',
+        xfbml: true,
+        version: 'v2.5'
+      });
+    };
 
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
 
   <section id="main" class="overlay">
     <h1>Bądź czujny...</h1>
@@ -52,7 +54,7 @@ website
 
   <section id="end" class="overlay">
     <h1>Wyniki:</h1>
-<!--    <p>Data i czas rozpoczęcia testu: <span id="date"></span></p>-->
+    <!--    <p>Data i czas rozpoczęcia testu: <span id="date"></span></p>-->
     <ol id="resultsTable">
       <li>0.234</li>
       <li>0.234</li>
@@ -63,6 +65,10 @@ website
       Średnia: <span id="avgTime">0.333</span>s.
     </h2>
 
+    <a href="#" class="button default repeat"><i class="fa fa-repeat fa-lg"></i>Graj dalej</a>
+    <br>
+    <a href="#" class="button share"><i class="fa fa-facebook-f fa-lg"></i>Udostępnij wynik</a>
+    <a href="#" class="button history"><i class="fa fa-history fa-lg"></i>Przejrzyj historię</a>
   </section>
 
   <section id="falstart" class="overlay">
@@ -81,8 +87,9 @@ website
     <p>Twoje zadanie to nacisnąć dowolny przycisk (klawiatury lub myszy) gdy zobaczysz kolorowy obiekt.</p>
     <p>Po <span id="rounds">10</span> rundach zobaczysz wyniki.</p>
     <h3>Naciśnij dowolny klawisz aby rozpocząć.</h3>
-<!--    <p class="footer">&copy; 2015</p>-->
+    <!--    <p class="footer">&copy; 2015</p>-->
   </section>
 
 </body>
+
 </html>
