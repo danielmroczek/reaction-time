@@ -27,7 +27,7 @@ RT.DeepLinking = function () {
   };
 
   this.clearState = function () {
-
+    window.location.hash = '';
   };
 
   this.encodeScore = encodeScore;

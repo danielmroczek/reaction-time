@@ -12,6 +12,7 @@ RT.MainController = function (options) {
   var beginDate;
   var resultsArray = [];
   var historyController;
+  var deepLinking = new RT.DeepLinking();
   var colours = [
     '#F44336',
     '#E91E63',
@@ -40,6 +41,7 @@ RT.MainController = function (options) {
     }
     $('#rounds').text(options.rounds);
     historyController = new RT.ScoreHistoryController();
+    var state = deepLinking.getState();
     addDocumentHandler(startGame);
   };
 
@@ -48,7 +50,7 @@ RT.MainController = function (options) {
     resultsArray = [];
     beginDate = Date.now();
     $('#end').hide();
-    $('#intro').fadeOut('fast', $('#intro').hide);
+    $('#intro').fadeOut('fast');
     startRound(round);
   };
 
@@ -74,8 +76,26 @@ RT.MainController = function (options) {
     removeDocumentHandler();
     //$('#resultsTable').text(JSON.stringify(resultsArray));
     $('#resultsTable').empty();
+    var score = computeScore();
+    historyController.saveScore(score);
+    deepLinking.saveState(score);
+    showScore(score);
+  };
+
+  function computeScore() {
     var sum = 0;
-    resultsArray.forEach(function(result) {
+
+    var avg = Math.round((sum / resultsArray.length) * 1000) / 1000;
+    var score = {
+      date: beginDate,
+      results: resultsArray,
+      avg: avg
+    };
+    return score;
+  }
+
+  function showScore(score) {
+    score.results.forEach(function(result) {
       var el = $('<li/>');
       if (result.type === 'success') {
         el.text(result.time + 's.');
@@ -83,20 +103,12 @@ RT.MainController = function (options) {
         el.text("Falstart");
       }
       $('#resultsTable').append(el);
-      sum += result.time;
-    });
-    var avg = Math.round((sum / resultsArray.length) * 1000) / 1000;
-    historyController.saveScore({
-      date: beginDate,
-      results: resultsArray,
-      avg: avg
     });
 
     $('#avgTime').text(avg);
     $('#end').show();
     $('.button.repeat').one('click', backToIntro);
-//    addDocumentHandler(backToIntro);
-  };
+  }
 
   function backToIntro() {
     removeDocumentHandler();
