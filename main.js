@@ -42,8 +42,23 @@ RT.MainController = function (options) {
     $('#rounds').text(options.rounds);
     historyController = new RT.ScoreHistoryController();
     var state = deepLinking.getState();
-    addDocumentHandler(startGame);
+    if (state) {
+      showSavedScore(state);
+    } else {
+     addDocumentHandler(startGame);
+    }
   };
+
+  function showSavedScore(score) {
+    $('#savedScore').show();
+    generateScoreTable(score);
+    $('.button.play').one('click', onStartGameClick);
+  };
+
+  function onStartGameClick() {
+    $('#savedScore').hide();
+    addDocumentHandler(startGame);
+  }
 
   function startGame() {
     round = 1;
@@ -75,15 +90,20 @@ RT.MainController = function (options) {
   function results() {
     removeDocumentHandler();
     //$('#resultsTable').text(JSON.stringify(resultsArray));
-    $('#resultsTable').empty();
+
     var score = computeScore();
     historyController.saveScore(score);
     deepLinking.saveState(score);
-    showScore(score);
+    generateScoreTable(score);
+    $('#end').show();
+    $('.button.repeat').one('click', backToIntro);
   };
 
   function computeScore() {
     var sum = 0;
+    resultsArray.forEach(function(result) {
+      sum += result.time;
+    });
 
     var avg = Math.round((sum / resultsArray.length) * 1000) / 1000;
     var score = {
@@ -94,7 +114,8 @@ RT.MainController = function (options) {
     return score;
   }
 
-  function showScore(score) {
+  function generateScoreTable(score) {
+    $('.resultsTable').empty();
     score.results.forEach(function(result) {
       var el = $('<li/>');
       if (result.type === 'success') {
@@ -102,12 +123,11 @@ RT.MainController = function (options) {
       } else {
         el.text("Falstart");
       }
-      $('#resultsTable').append(el);
+      $('.resultsTable').append(el);
     });
 
-    $('#avgTime').text(avg);
-    $('#end').show();
-    $('.button.repeat').one('click', backToIntro);
+    $('.avgTime').text(score.avg);
+
   }
 
   function backToIntro() {

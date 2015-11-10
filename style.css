@@ -35,7 +35,12 @@ section {
   color: white;
 }
 
-#falstart, #result, #end {
+#savedScore {
+  background: #039BE5;
+  color: white;
+}
+
+#falstart, #result, #end, #savedScore {
   display: none;
 }
 
@@ -69,12 +74,12 @@ section {
   z-index: 100;
 }
 
-#resultsTable {
+.resultsTable {
   display: inline-block;
   margin: 0;
   padding-left: 1.5em;
 }
 
-#resultsTable > li {
+.resultsTable > li {
   font-size: 1.2em;
 }

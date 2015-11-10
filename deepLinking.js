@@ -12,8 +12,13 @@ RT.DeepLinking = function () {
   this.getState = function () {
     try {
       var hash = window.location.hash.substr(2);
+      if (!hash) {
+        return null;
+      }
+
       var csv = atob(hash);
       var result = decodeScore(csv);
+
       return result;
     } catch (e) {
       return null;
