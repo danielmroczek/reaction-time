@@ -26,27 +26,6 @@
 </head>
 
 <body>
-  <script>
-    window.fbAsyncInit = function () {
-      FB.init({
-        appId: '522567561242186',
-        xfbml: true,
-        version: 'v2.5'
-      });
-    };
-
-    (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {
-        return;
-      }
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-  </script>
-
   <section id="main" class="overlay">
     <h1>Bądź czujny...</h1>
     <h1 id="roundName">Runda <span id="roundNumber">1</span></h1>
@@ -55,7 +34,7 @@
 
   <section id="end" class="overlay">
     <h1>Wyniki:</h1>
-    <!--    <p>Data i czas rozpoczęcia testu: <span id="date"></span></p>-->
+    <p>Data i czas rozpoczęcia testu: <span id="endDate"></span></p>
     <ol class="resultsTable">
       <li>0.234</li>
       <li>0.234</li>
@@ -68,10 +47,11 @@
 
     <a href="#" class="button default repeat"><i class="fa fa-repeat fa-lg"></i>Graj dalej</a>
     <br>
-    <a href="#" class="button share"><i class="fa fa-facebook-f fa-lg"></i>Udostępnij wynik</a>
-    <a href="#" class="button history"><i class="fa fa-history fa-lg"></i>Przejrzyj historię</a>
-
-    <p>Możesz także skopiować link tej strony i pochwalić się wynikiem z przyjaciółmi.</p>
+    <div class="share-buttons">
+      <a href="#" class="button share-link"><i class="fa fa-link fa-lg"></i>Kopiuj link</a>
+      <a href="#" class="button history"><i class="fa fa-history fa-lg"></i>Przejrzyj historię</a>
+    </div>
+    <p class="copy-feedback">Link skopiowany!</p>
   </section>
 
   <section id="falstart" class="overlay">
@@ -88,14 +68,17 @@
   <section id="intro" class="overlay">
     <h1>Program do mierzenia czasu reakcji</h1>
     <p>Twoje zadanie to nacisnąć dowolny przycisk (klawiatury lub myszy) gdy zobaczysz kolorowy obiekt.</p>
-    <p>Po <span id="rounds">10</span> rundach zobaczysz wyniki.</p>
-    <h3>Naciśnij dowolny klawisz aby rozpocząć.</h3>
+    <p>Po <span id="rounds">5</span> rundach zobaczysz wyniki.</p>
+    <div class="intro-buttons">
+      <a href="#" class="button default start"><i class="fa fa-play fa-lg"></i>Start</a>
+      <a href="#" class="button history"><i class="fa fa-history fa-lg"></i>Przejrzyj historię</a>
+    </div>
     <!--    <p class="footer">&copy; 2015</p>-->
   </section>
 
   <section id="savedScore" class="overlay">
     <h1>Zapisany wynik:</h1>
-    <!--    <p>Data i czas rozpoczęcia testu: <span id="date"></span></p>-->
+    <p>Data i czas rozpoczęcia testu: <span id="savedScoreDate"></span></p>
     <ol class="resultsTable">
       <li>0.234</li>
       <li>0.234</li>
@@ -108,6 +91,13 @@
 
     <a href="#" class="button default play"><i class="fa fa-repeat fa-gamepad"></i>Zagraj!</a>
 
+  </section>
+
+  <section id="history" class="overlay">
+    <h1>Historia wyników:</h1>
+    <div id="historyContent"></div>
+    <a href="#" class="button default clearHistory"><i class="fa fa-trash fa-lg"></i>Wyczyść historię</a>
+    <a href="#" class="button default backToStart"><i class="fa fa-arrow-left fa-lg"></i>Powrót do startu</a>
   </section>
 
 </body>

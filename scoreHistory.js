@@ -8,6 +8,7 @@ RT.ScoreHistoryController = function (options) {
   // Public methods
   this.saveScore =  saveScore;
   this.getHistory = getHistory;
+  this.clearHistory = clearHistory;
 
   function saveScore(score) {
     var history = getHistory() || [];
@@ -24,10 +25,24 @@ RT.ScoreHistoryController = function (options) {
   }
 
   function setObj(key, obj) {
-    return localStorage.setItem(key, JSON.stringify(obj))
+    return localStorage.setItem(key, JSON.stringify(obj));
   }
 
   function getObj(key) {
-    return JSON.parse(localStorage.getItem(key))
+    var item = localStorage.getItem(key);
+    if (item) {
+      try {
+        return JSON.parse(item);
+      } catch (e) {
+        console.error('Error parsing history from localStorage:', e);
+        return null;
+      }
+    }
+    return null;
+  }
+
+  function clearHistory() {
+    localStorage.removeItem(options.storageKey);
+    console.log('History cleared.');
   }
 }

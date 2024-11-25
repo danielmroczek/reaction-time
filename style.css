@@ -27,17 +27,24 @@ section {
 
 #result {
   background: #43A047;
-  color: white;
+  color: #fff;
 }
 
 #end {
   background: #039BE5;
-  color: white;
+  color: #fff;
 }
 
 #savedScore {
   background: #039BE5;
-  color: white;
+  color: #fff;
+}
+
+#history {
+  background: #673AB7;
+  color: #fff;
+  display: none;
+  padding: 2em;
 }
 
 #falstart, #result, #end, #savedScore {
@@ -82,4 +89,139 @@ section {
 
 .resultsTable > li {
   font-size: 1.2em;
+}
+
+#history li, #history span {
+  display: inline-block;
+    width: 3em;
+}
+
+#history ol {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+.historyLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1em;
+  margin-bottom: 0.8em;
+  transition: transform 0.2s ease;
+}
+
+.historyLine:hover {
+  transform: translateX(5px);
+}
+
+.historyLine span, .historyLine ol, .historyLine .avg, .historyLine .button {
+  margin: 0 0.5em;
+  font-size: 0.9em;
+}
+
+.historyLine ol {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin: 0 2em !important;
+}
+
+.historyLine ol li {
+  font-size: 0.9em;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.3em 0.8em;
+  border-radius: 4px;
+  width: auto !important;
+}
+
+.avg {
+  font-weight: 700;
+  font-size: 1.1em;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.3em 0.8em;
+  border-radius: 4px;
+}
+
+#historyContent {
+  margin-bottom: 2em;
+  margin-bottom: 3em;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#history h1 {
+  font-size: 2em;
+  margin-bottom: 1.5em;
+}
+
+.intro-buttons {
+  margin-top: 2em;
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+}
+
+.button.start {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.button.start:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.share-buttons {
+  margin-top: 1em;
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+}
+
+.copy-feedback {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9em;
+  margin-top: 1em;
+}
+
+.copy-feedback.visible {
+  opacity: 1;
+}
+
+.no-history {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 2em;
+}
+
+.no-history .fa-info-circle {
+  margin-right: 0.5em;
+  font-size: 1.5em;
+}
+
+/* Style for the date in savedScore */
+#savedScore p {
+  font-size: 1em;
+  margin-bottom: 1em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+#savedScore p span#savedScoreDate {
+  font-weight: 700;
+  /* Optional: Add any additional styling as needed */
+}
+
+/* Style for the date in end section */
+#end p span#endDate {
+  font-weight: 700;
+  /* Optional: Add any additional styling as needed */
 }

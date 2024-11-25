@@ -1,30 +1,77 @@
 a.button {
-  background: rgba(0, 0, 0, 0.1);
+  font-size: 0.9em;
+  padding: 0.6em 1.2em;
+  background: rgba(255, 255, 255, 0.1);
   outline: none;
   text-decoration: none;
   border: 0;
   color: inherit;
-  padding: 0.8em 1em;
   border-radius: 2em;
-  font-size: 1em;
   display: inline-block;
-  transition: 0.15s;
+  transition: all 0.2s ease;
   margin: 0 .25em;
 }
 
 a.button:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
 a.button:active {
-  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(1px);
 }
 
 a.button.default {
-  font-size: 1.5em;
+  font-size: 1.1em;
   margin-bottom: 1em;
 }
 
+a.button.small {
+  font-size: 0.8em;
+  padding: 0.4em 0.8em;
+}
+
 a.button > .fa {
-  margin-right: .4em;
+  font-size: 0.9em;
+  margin-right: 0.4em;
+}
+
+/* Remove duplicate history-specific styles since they're now default */
+#history .button {
+  margin-bottom: 0;
+}
+
+/* Make both start and history buttons in intro section look the same */
+.intro-buttons .button {
+  font-size: 1.1em;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.8em 1.5em;
+}
+
+.intro-buttons .button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Style both buttons in intro consistently */
+#intro .button {
+  font-size: 1.1em;
+  padding: 0.8em 1.5em;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 0.5em;
+}
+
+#intro .button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Style for the date in savedScore */
+#savedScore p span#savedScoreDate {
+  font-weight: 700;
+  /* Optional: Add any additional styling as needed */
+}
+
+/* Style for the date in end section */
+#end p span#endDate {
+  font-weight: 700;
+  /* Optional: Add any additional styling as needed */
 }
