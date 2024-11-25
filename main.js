@@ -62,16 +62,16 @@ RT.MainController = function (options) {
     }
     $('#savedScore').show();
     generateScoreTable(score);
-    
+
     if (score.date) {
       // Set the date in a formatted way
       var date = new Date(score.date); // 'score.date' should be a valid timestamp
-      var options = { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit' 
+      var options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
       };
       var formattedDate = date.toLocaleDateString('pl-PL', options);
       $('#savedScoreDate').text(formattedDate);
@@ -80,7 +80,7 @@ RT.MainController = function (options) {
       $('#savedScoreDate').text('Nieznana data'); // Fallback text
       console.warn('Score date is missing:', score);
     }
-    
+
     $('.button.play').one('click', onStartGameClick);
   };
 
@@ -128,12 +128,12 @@ RT.MainController = function (options) {
     if (score.date) {
       // Set date in end section
       var date = new Date(score.date);
-      var options = { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit' 
+      var options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
       };
       var formattedDate = date.toLocaleDateString('pl-PL', options);
       $('#endDate').text(formattedDate);
@@ -165,14 +165,19 @@ RT.MainController = function (options) {
 
   function generateScoreTable(score) {
     $('.resultsTable').empty();
+    var template = document.getElementById('result-item-template');
+
     score.results.forEach(function (result) {
-      var el = $('<li/>');
+      var clone = template.content.cloneNode(true);
+      var li = clone.querySelector('li');
+
       if (result.type === 'success') {
-        el.text(result.time + 's.');
+        li.textContent = result.time + 's.';
       } else {
-        el.text("Falstart");
+        li.textContent = "Falstart";
       }
-      $('.resultsTable').append(el);
+
+      $('.resultsTable').append(clone);
     });
 
     $('.avgTime').text(score.avg);
@@ -250,46 +255,49 @@ RT.MainController = function (options) {
   function showHistory() {
     var history = this.historyController.getHistory();
     $('#historyContent').empty();
-    
+
     if (!history || history.length === 0) {
-      var messageHtml = '<div class="no-history"><i class="fa fa-info-circle"></i> Brak dostępnej historii.</div>';
-      $('#historyContent').append(messageHtml);
+      // Use no-history template
+      var template = document.getElementById('no-history-template');
+      var clone = template.content.cloneNode(true);
+      $('#historyContent').append(clone);
       console.log('No history available to display.');
     } else {
       history.forEach(function (score) {
-        var historyLine = $('<div class="historyLine"/>');
-        var date = new Date(parseInt(score.date, 10)).toLocaleDateString('pl-PL', { 
-          year: 'numeric', 
-          month: 'long', 
+        // Use history-entry template
+        var template = document.getElementById('history-entry-template');
+        var clone = template.content.cloneNode(true);
+        var historyLine = $(clone);
+
+        var date = new Date(parseInt(score.date, 10)).toLocaleDateString('pl-PL', {
+          year: 'numeric',
+          month: 'long',
           day: 'numeric',
           hour: '2-digit',
           minute: '2-digit'
         });
-        historyLine.append('<span>' + date + '</span>');
-        
-        var ol = $('<ol/>');
+        historyLine.find('span').first().text(date);
+
+        var ol = historyLine.find('ol');
         score.results.forEach(function (result) {
-          ol.append('<li>' + (result.type === 'success' ? result.time + 's' : 'Falstart') + '</li>');
+          var li = $('<li>' + (result.type === 'success' ? result.time + 's' : 'Falstart') + '</li>');
+          ol.append(li);
         });
-        historyLine.append(ol);
-        
-        historyLine.append('<span class="avg">' + score.avg + '</span>');
+
+        historyLine.find('.avg').text(score.avg);
 
         // Generate deep-linked URL
         var encodedScore = deepLinking.encodeScore(score);
         var shareUrl = window.location.origin + window.location.pathname + '#!' + btoa(encodedScore);
         console.log('Generated share URL:', shareUrl);
 
-        // Create 'Copy URL' button
-        var copyButton = $('<a href="#" class="button copyLink"><i class="fa fa-link"></i> Kopiuj URL</a>');
-        copyButton.data('shareUrl', shareUrl);
-        historyLine.append(copyButton);
-        
+        // Set shareUrl data attribute
+        historyLine.find('.copyLink').data('shareUrl', shareUrl);
         $('#historyContent').append(historyLine);
         console.log('Added history entry to display.');
       });
     }
-    
+
     $('#history').show();
     console.log('History section displayed.');
   }
@@ -385,7 +393,7 @@ $(function () {
     $('#intro').show();
     console.log('Back to start button clicked.');
   });
-  
+
   // Add event handler for 'Copy URL' buttons
   $(document).on('click', '.button.copyLink', function (e) {
     e.preventDefault();
@@ -393,19 +401,22 @@ $(function () {
     console.log('Copy URL button clicked. URL:', shareUrl);
 
     navigator.clipboard.writeText(shareUrl).then(function () {
-      // Provide feedback to the user
-      var feedback = $('<span class="copy-feedback visible">URL skopiowany!</span>');
-      $(this).after(feedback);
+      // Use copy-feedback template
+      var template = document.getElementById('copy-feedback-template');
+      var clone = template.content.cloneNode(true);
+      $(this).after(clone);
       console.log('Share URL copied to clipboard.');
       setTimeout(function () {
-        feedback.fadeOut(500, function () {
+        $('.copy-feedback').fadeOut(500, function () {
           $(this).remove();
           console.log('Copy feedback removed.');
         });
       }, 2000);
     }.bind(this)).catch(function () {
       alert('Nie udało się skopiować URL.');
-      console.error('Failed to copy share URL to clipboard.');
     });
+    console.error('Failed to copy share URL to clipboard.');
   });
 });
+
+
