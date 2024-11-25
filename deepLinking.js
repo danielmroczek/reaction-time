@@ -1,111 +1,96 @@
-var RT = RT || {};
+export class DeepLinking {
+  constructor() {
+    this.types = {
+      "s": "success",
+      "f": "false-start"
+    };
+    this.splitChr = ',';
+  }
 
-RT.DeepLinking = function () {
-  'use strict';
-
-  var types = {
-    "s": "success",
-    "f": "false-start"
-  };
-  var splitChr = ',';
-
-  this.getState = function () {
+  getState() {
     try {
-      var hash = window.location.hash.substr(2);
+      const hash = window.location.hash.substr(2);
       if (!hash) {
         console.warn('No hash found in URL.');
         return null;
       }
 
-      var csv = atob(hash);
+      const csv = atob(hash);
       console.log('Decoded CSV from hash:', csv);
-      var result = decodeScore(csv);
-
-      return result;
+      return this.decodeScore(csv);
     } catch (e) {
       console.error('Error decoding deep link:', e);
       return null;
     }
-  };
+  }
 
-  this.saveState = function (score) {
-    var scoreStr = encodeScore(score);
-    var base = btoa(scoreStr);
-    window.location.hash = '!' + base;
+  saveState(score) {
+    const scoreStr = this.encodeScore(score);
+    const base = btoa(scoreStr);
+    window.location.hash = `!${base}`;
     console.log('Saved state with hash:', window.location.hash);
-  };
+  }
 
-  this.clearState = function () {
+  clearState() {
     window.location.hash = '';
     console.log('Cleared deep link state.');
-  };
+  }
 
-  this.encodeScore = encodeScore;
-  function encodeScore(score) {
-    // Ensure score.date is present
+  encodeScore(score) {
     if (!score.date) {
       console.warn('Score object missing date. Assigning current date.');
       score.date = Date.now();
     }
 
-    var data = [];
-    data.push(score.date.toString()); // Push date as string
-    data.push(score.results.length.toString());
-    score.results.forEach(function (result) {
-      var type = result.type.substr(0, 1).toLowerCase();
-      if (!types[type]) {
-        console.warn('Unknown result type:', result.type);
-        type = 's'; // default to success
-      }
-      data.push(type);
-      data.push(result.time.toString());
-    });
-    data.push(score.avg.toString());
-    var output = data.join(splitChr);
-    console.log('Encoded Score:', output); // Debugging statement
+    const data = [
+      score.date.toString(),
+      score.results.length.toString(),
+      ...score.results.flatMap(result => {
+        const type = result.type.substr(0, 1).toLowerCase();
+        return [
+          this.types[type] ? type : 's',
+          result.time.toString()
+        ];
+      }),
+      score.avg.toString()
+    ];
+
+    const output = data.join(this.splitChr);
+    console.log('Encoded Score:', output);
     return output;
   }
 
-  this.decodeScore = decodeScore;
-  function decodeScore(score) {
+  decodeScore(score) {
     try {
-      var obj = {};
-      var data = score.split(splitChr);
-      if (data.length < 3) { // Ensure minimum data
+      const data = score.split(this.splitChr);
+      if (data.length < 3) {
         throw new Error('Insufficient data to decode score.');
       }
-      obj.date = parseInt(data.shift(), 10);
-      if (isNaN(obj.date)) {
+
+      const date = parseInt(data.shift(), 10);
+      if (isNaN(date)) {
         throw new Error('Invalid date format.');
       }
-      var rounds = parseInt(data.shift(), 10);
+
+      const rounds = parseInt(data.shift(), 10);
       if (isNaN(rounds) || rounds < 1) {
         throw new Error('Invalid number of rounds.');
       }
-      obj.results = [];
-      for (var i = 0; i < rounds; i += 1) {
-        var result = {};
-        var t = data.shift();
-        result.type = types[t] || 'unknown';
-        var time = parseFloat(data.shift());
-        if (isNaN(time)) {
-          console.warn('Invalid time format for result. Setting to 0.');
-          time = 0;
-        }
-        result.time = time;
-        obj.results.push(result);
-      }
-      obj.avg = parseFloat(data.shift());
-      if (isNaN(obj.avg)) {
-        console.warn('Invalid average format. Setting to 0.');
-        obj.avg = 0;
-      }
-      console.log('Decoded Score Object:', obj); // Debugging statement
+
+      const results = Array.from({ length: rounds }, () => {
+        const type = this.types[data.shift()] || 'unknown';
+        const time = parseFloat(data.shift()) || 0;
+        return { type, time };
+      });
+
+      const avg = parseFloat(data.shift()) || 0;
+
+      const obj = { date, results, avg };
+      console.log('Decoded Score Object:', obj);
       return obj;
     } catch (e) {
       console.error('Error decoding score:', e);
       return null;
     }
   }
-
-};
+}

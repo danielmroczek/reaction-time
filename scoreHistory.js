@@ -1,48 +1,41 @@
-var RT = RT || {};
+export class ScoreHistoryController {
+  constructor(options = {}) {
+    this.options = {
+      storageKey: 'scoreHistory',
+      ...options
+    };
+  }
 
-RT.ScoreHistoryController = function (options) {
-  var options = $.extend({
-    storageKey: 'scoreHistory'
-  }, options);
-
-  // Public methods
-  this.saveScore =  saveScore;
-  this.getHistory = getHistory;
-  this.clearHistory = clearHistory;
-
-  function saveScore(score) {
-    var history = getHistory() || [];
+  saveScore(score) {
+    const history = this.getHistory() || [];
     history.push(score);
-    setHistory(history);
-  };
-
-  function getHistory() {
-    return getObj(options.storageKey);
+    this.setHistory(history);
   }
 
-  function setHistory(history) {
-    setObj(options.storageKey, history);
+  getHistory() {
+    return this.getObj(this.options.storageKey);
   }
 
-  function setObj(key, obj) {
-    return localStorage.setItem(key, JSON.stringify(obj));
+  setHistory(history) {
+    this.setObj(this.options.storageKey, history);
   }
 
-  function getObj(key) {
-    var item = localStorage.getItem(key);
-    if (item) {
-      try {
-        return JSON.parse(item);
-      } catch (e) {
-        console.error('Error parsing history from localStorage:', e);
-        return null;
-      }
+  setObj(key, obj) {
+    localStorage.setItem(key, JSON.stringify(obj));
+  }
+
+  getObj(key) {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : null;
+    } catch (e) {
+      console.error('Error parsing history from localStorage:', e);
+      return null;
     }
-    return null;
   }
 
-  function clearHistory() {
-    localStorage.removeItem(options.storageKey);
+  clearHistory() {
+    localStorage.removeItem(this.options.storageKey);
     console.log('History cleared.');
   }
 }
