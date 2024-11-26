@@ -1,19 +1,27 @@
+:root {
+  --button-bg: rgba(255, 255, 255, 0.1);
+  --button-bg-hover: rgba(255, 255, 255, 0.2);
+  --button-padding: 0.6em 1.2em;
+  --button-radius: 2em;
+  --transition-speed: 0.2s;
+}
+
 a.button {
   font-size: 0.9em;
-  padding: 0.6em 1.2em;
-  background: rgba(255, 255, 255, 0.1);
+  padding: var(--button-padding);
+  background: var(--button-bg);
   outline: none;
   text-decoration: none;
   border: 0;
   color: inherit;
-  border-radius: 2em;
+  border-radius: var(--button-radius);
   display: inline-block;
-  transition: all 0.2s ease;
+  transition: all var(--transition-speed) ease;
   margin: 0 .25em;
 }
 
 a.button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--button-bg-hover);
   transform: translateY(-1px);
 }
 
@@ -44,7 +52,7 @@ a.button > .fa {
 /* Make both start and history buttons in intro section look the same */
 .intro-buttons .button {
   font-size: 1.1em;
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--button-bg-hover);
   padding: 0.8em 1.5em;
 }
 
@@ -56,7 +64,7 @@ a.button > .fa {
 #intro .button {
   font-size: 1.1em;
   padding: 0.8em 1.5em;
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--button-bg-hover);
   margin: 0 0.5em;
 }
 
@@ -65,13 +73,7 @@ a.button > .fa {
 }
 
 /* Style for the date in savedScore */
-#savedScore p span#savedScoreDate {
-  font-weight: 700;
-  /* Optional: Add any additional styling as needed */
-}
-
-/* Style for the date in end section */
+#savedScore p span#savedScoreDate,
 #end p span#endDate {
   font-weight: 700;
-  /* Optional: Add any additional styling as needed */
 }
