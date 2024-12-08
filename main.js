@@ -68,37 +68,42 @@ class MainController {
         const clone = template.content.cloneNode(true);
         const historyLine = $(clone);
 
-        const date = new Date(parseInt(score.date, 10)).toLocaleDateString('pl-PL', {
+        const date = new Date(parseInt(score.date, 10));
+        const dateStr = date.toLocaleDateString('pl-PL', {
           year: 'numeric',
-          month: 'long',
-          day: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }).replace(/\//g, '-');
+        
+        const timeStr = date.toLocaleTimeString('pl-PL', {
           hour: '2-digit',
           minute: '2-digit'
         });
-        historyLine.find('span').first().text(date);
+        
+        historyLine.find('.date-line').text(dateStr);
+        historyLine.find('.time-line').text(timeStr);
 
         const ol = historyLine.find('ol');
         score.results.forEach((result) => {
-          const li = $('<li>' + (result.type === 'success' ? result.time + 's' : 'Falstart') + '</li>');
-          ol.append(li);
+          if (result.type === 'success') {
+            const li = $('<li>' + result.time.toFixed(3) + 's</li>');
+            ol.append(li);
+          } else {
+            const li = $('<li>Falstart</li>');
+            ol.append(li);
+          }
         });
 
-        historyLine.find('.avg').text(score.avg);
+        historyLine.find('.avg').text(score.avg.toFixed(3));
 
-        // Generate deep-linked URL
         const encodedScore = this.deepLinking.encodeScore(score);
         const shareUrl = window.location.origin + window.location.pathname + '#!' + btoa(encodedScore);
-        console.log('Generated share URL:', shareUrl);
-
-        // Set shareUrl data attribute
         historyLine.find('.copyLink').data('shareUrl', shareUrl);
         $('#historyContent').append(historyLine);
-        console.log('Added history entry to display.');
       });
     }
 
-    $('#history').show();
-    console.log('History section displayed.');
+    $('#history').css('display', 'flex');
   }
 
   async copyToClipboard(text) {
@@ -355,6 +360,7 @@ class MainController {
 
 // Initialize on DOM ready
 $(() => {
+  console.log("Hello!");
   const controller = new MainController();
   controller.init();
 

@@ -1,5 +1,7 @@
+@import url('buttons.css');
+@import url('animations.css');
+
 :root {
-  /* Colors */
   --color-text: rgba(0, 0, 0, 0.87);
   --color-white: #fff;
   --color-intro: #263238;
@@ -8,13 +10,9 @@
   --color-end: #039BE5;
   --color-history: #673AB7;
   --color-ball: #E91E63;
-  
-  /* Spacing */
   --spacing-base: 1em;
   --spacing-lg: 2em;
   --spacing-xl: 3em;
-  
-  /* Base sizes */
   --font-size-base: 18px;
   --border-radius: 8px;
 }
@@ -26,47 +24,32 @@ body {
   font-size: var(--font-size-base);
 }
 
-section {
+.overlay {
   position: absolute;
   inset: 0;
   background: var(--color-white);
   text-align: center;
-
-  &#intro {
-    background: var(--color-intro);
-    color: var(--color-white);
-  }
-
-  &#falstart {
-    background: var(--color-falstart);
-    color: var(--color-white);
-  }
-
-  &#result {
-    background: var(--color-result);
-    color: var(--color-white);
-  }
-
-  &#end {
-    background: var(--color-end);
-    color: var(--color-white);
-  }
-
-  &#savedScore {
-    background: var(--color-end);
-    color: var(--color-white);
-  }
-
-  &#history {
-    background: var(--color-history);
-    color: var(--color-white);
-    display: none;
-    padding: var(--spacing-lg);
-  }
+  color: var(--color-white);
+  display: none;
 }
 
-#falstart, #result, #end, #savedScore {
-  display: none;
+#intro { 
+  background: var(--color-intro); 
+  display: block;
+}
+
+#main {
+  display: block;
+  color: var(--color-text);
+}
+#falstart { background: var(--color-falstart); }
+#result { background: var(--color-result); }
+#end, #savedScore { background: var(--color-end); }
+#history { background: var(--color-history); }
+
+#history {
+  flex-direction: column;
+  padding: var(--spacing-lg);
 }
 
 #roundName {
@@ -74,10 +57,6 @@ section {
   inset: 30% 0 auto 0;
   font-size: 3em;
   animation: ease .5s 1s forwards slideOutUp;
-}
-
-.footer {
-  margin-top: 3em;
 }
 
 .ball {
@@ -103,17 +82,6 @@ section {
   font-size: 1.2em;
 }
 
-#history li, #history span {
-  display: inline-block;
-    width: 3em;
-}
-
-#history ol {
-  margin: 0;
-  padding: 0;
-  display: inline-block;
-}
-
 .historyLine {
   display: flex;
   justify-content: space-between;
@@ -123,34 +91,26 @@ section {
   padding: var(--spacing-base);
   margin-bottom: 0.8em;
   transition: transform 0.2s ease;
+}
 
-  &:hover {
-    transform: translateX(5px);
-  }
+.historyLine:hover {
+  transform: translateX(5px);
+}
 
-  & span, 
-  & ol, 
-  & .avg, 
-  & .button {
-    margin: 0 0.5em;
-    font-size: 0.9em;
-  }
+.historyLine ol {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-base);
+  margin: 0 var(--spacing-lg);
+}
 
-  & ol {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    gap: var(--spacing-base);
-    margin: 0 var(--spacing-lg) !important;
-
-    & li {
-      font-size: 0.9em;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 0.3em 0.8em;
-      border-radius: 4px;
-      width: auto !important;
-    }
-  }
+.historyLine li {
+  font-size: 0.9em;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.3em 0.8em;
+  border-radius: 4px;
+  width: auto;
 }
 
 .avg {
@@ -162,33 +122,29 @@ section {
 }
 
 #historyContent {
-  margin-bottom: var(--spacing-xl);
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--spacing-base);
+  margin: 0 auto var(--spacing-xl);
   max-width: 800px;
-  margin-inline: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
 
-#history h1 {
-  font-size: 2em;
-  margin-bottom: 1.5em;
+#historyContent::-webkit-scrollbar {
+  width: 8px;
 }
 
-.intro-buttons {
-  margin-top: 2em;
-  display: flex;
-  justify-content: center;
-  gap: 1em;
+#historyContent::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
-.button.start {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.button.start:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.share-buttons {
-  margin-top: 1em;
+.button-group {
+  margin-top: var(--spacing-lg);
   display: flex;
   justify-content: center;
   gap: 1em;
@@ -212,7 +168,7 @@ section {
   justify-content: center;
   font-size: 1.2em;
   color: rgba(255, 255, 255, 0.8);
-  margin-top: 2em;
+  margin-top: var(--spacing-lg);
 }
 
 .no-history .fa-info-circle {
@@ -220,20 +176,34 @@ section {
   font-size: 1.5em;
 }
 
-/* Style for the date in savedScore */
-#savedScore p {
+#history h1 {
+  font-size: 2em;
+  margin-bottom: 1.5em;
+}
+
+.date-display {
   font-size: 1em;
   margin-bottom: 1em;
   color: rgba(255, 255, 255, 0.9);
 }
 
-#savedScore p span#savedScoreDate {
+.date-display span {
   font-weight: 700;
-  /* Optional: Add any additional styling as needed */
 }
 
-/* Style for the date in end section */
-#end p span#endDate {
-  font-weight: 700;
-  /* Optional: Add any additional styling as needed */
+.date-display {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 120px;
+}
+
+.date-line {
+  font-weight: 600;
+  margin-bottom: 0.2em;
+}
+
+.time-line {
+  font-size: 0.9em;
+  opacity: 0.8;
 }

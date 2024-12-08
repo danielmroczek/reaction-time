@@ -1,75 +1,52 @@
 :root {
   --button-bg: rgba(255, 255, 255, 0.1);
   --button-bg-hover: rgba(255, 255, 255, 0.2);
-  --button-padding: 0.6em 1.2em;
-  --button-radius: 2em;
-  --transition-speed: 0.2s;
+  --button-bg-hover-darker: rgba(255, 255, 255, 0.3);
 }
 
-a.button {
-  font-size: 0.9em;
-  padding: var(--button-padding);
+.button {
+  font-size: 1em;
+  padding: 0.8em 1.5em;
   background: var(--button-bg);
-  outline: none;
   text-decoration: none;
-  border: 0;
   color: inherit;
-  border-radius: var(--button-radius);
+  border-radius: 2em;
   display: inline-block;
-  transition: all var(--transition-speed) ease;
-  margin: 0 .25em;
+  transition: all 0.2s ease;
+  margin: 0 0.25em;
+  border: 0;
+  outline: none;
 }
 
-a.button:hover {
-  background: var(--button-bg-hover);
+.button:hover {
+  background: var(--button-bg-hover-darker);
   transform: translateY(-1px);
 }
 
-a.button:active {
+.button:active {
   transform: translateY(1px);
 }
 
-a.button.default {
-  font-size: 1.1em;
-  margin-bottom: 1em;
-}
-
-a.button.small {
-  font-size: 0.8em;
-  padding: 0.4em 0.8em;
-}
-
-a.button > .fa {
-  font-size: 0.9em;
-  margin-right: 0.4em;
-}
-
-/* Remove duplicate history-specific styles since they're now default */
-#history .button {
-  margin-bottom: 0;
-}
-
-/* Make both start and history buttons in intro section look the same */
-.intro-buttons .button {
-  font-size: 1.1em;
-  background: var(--button-bg-hover);
-  padding: 0.8em 1.5em;
-}
-
-.intro-buttons .button:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* Style both buttons in intro consistently */
-#intro .button {
-  font-size: 1.1em;
-  padding: 0.8em 1.5em;
+.button.default {
   background: var(--button-bg-hover);
   margin: 0 0.5em;
 }
 
-#intro .button:hover {
-  background: rgba(255, 255, 255, 0.3);
+.button.small {
+  font-size: 0.8em;
+  padding: 0.4em 0.8em;
+}
+
+.button .fa {
+  font-size: 0.9em;
+  margin-right: 0.4em;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin-top: 1em;
 }
 
 /* Style for the date in savedScore */

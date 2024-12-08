@@ -10,13 +10,11 @@
   <meta property="og:description" content="Program do mierzenia czasu reakcji. Zrób test i zobacz jak szybko reagujesz." />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="pl_PL" />
-  <meta property="og:image" content="http://czasreakcji.tk/logo.png" /> website
+  <meta property="og:image" content="http://czasreakcji.tk/logo.png" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css' async>
-  <link rel="stylesheet" href="animations.css">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="buttons.css">
   <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script type="module" src="main.js" defer></script>
 </head>
@@ -43,7 +41,7 @@
 
     <a href="#" class="button default repeat"><i class="fa fa-repeat fa-lg"></i>Graj dalej</a>
     <br>
-    <div class="share-buttons">
+    <div class="buttons">
       <a href="#" class="button share-link"><i class="fa fa-link fa-lg"></i>Kopiuj link</a>
       <a href="#" class="button history"><i class="fa fa-history fa-lg"></i>Przejrzyj historię</a>
     </div>
@@ -65,9 +63,9 @@
     <h1>Program do mierzenia czasu reakcji</h1>
     <p>Twoje zadanie to nacisnąć dowolny przycisk (klawiatury lub myszy) gdy zobaczysz kolorowy obiekt.</p>
     <p>Po <span id="rounds">5</span> rundach zobaczysz wyniki.</p>
-    <div class="intro-buttons">
+    <div class="buttons">
       <a href="#" class="button default start"><i class="fa fa-play fa-lg"></i>Start</a>
-      <a href="#" class="button history"><i class="fa fa-history fa-lg"></i>Przejrzyj historię</a>
+      <a href="#" class="button default history"><i class="fa fa-history fa-lg"></i>Przejrzyj historię</a>
     </div>
     <!--    <p class="footer">&copy; 2015</p>-->
   </section>
@@ -92,8 +90,11 @@
   <section id="history" class="overlay">
     <h1>Historia wyników:</h1>
     <div id="historyContent"></div>
-    <a href="#" class="button default clearHistory"><i class="fa fa-trash fa-lg"></i>Wyczyść historię</a>
-    <a href="#" class="button default backToStart"><i class="fa fa-arrow-left fa-lg"></i>Powrót do startu</a>
+    
+    <div class="buttons">
+      <a href="#" class="button default clearHistory"><i class="fa fa-trash fa-lg"></i>Wyczyść historię</a>
+      <a href="#" class="button default backToStart"><i class="fa fa-arrow-left fa-lg"></i>Powrót do startu</a>
+    </div>
   </section>
 
   <!-- Template for no history message -->
@@ -106,10 +107,13 @@
   <!-- Template for history entry -->
   <template id="history-entry-template">
     <div class="historyLine">
-      <span></span>
-      <ol></ol>
-      <span class="avg"></span>
-      <a href="#" class="button copyLink"><i class="fa fa-link"></i> Kopiuj URL</a>
+      <div class="date-display">
+        <div class="date-line"></div>
+        <div class="time-line"></div>
+      </div>
+      <!-- <ol></ol> -->
+      <span><span class="avg"></span></span>
+      <a href="#" class="button small copyLink"><i class="fa fa-link"></i> Kopiuj URL</a>
     </div>
   </template>
 
