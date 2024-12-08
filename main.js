@@ -30,7 +30,7 @@ class MainController {
 
   // Document handler
   documentHandler = (e) => {
-    if (!$(e.target).closest('.button').length && this.currentHandler) {
+    if (!e.target.closest('.button') && this.currentHandler) {
       this.currentHandler(e);
     }
   }
@@ -40,7 +40,7 @@ class MainController {
       this.options.rounds = 1;
     }
     
-    $('#rounds').text(this.options.rounds);
+    document.getElementById('rounds').textContent = this.options.rounds;
     this.historyController = new ScoreHistoryController();
     
     const state = this.deepLinking.getState();
@@ -52,21 +52,37 @@ class MainController {
     }
   }
 
-  // Expose historyController publicly
+  // DOM helper methods
+  fadeOut(element, duration = 200) {
+    element.style.opacity = '0';
+    setTimeout(() => {
+      element.style.display = 'none';
+      element.style.opacity = '1';
+    }, duration);
+  }
+
+  fadeIn(element, display = 'block', duration = 200) {
+    element.style.opacity = '0';
+    element.style.display = display;
+    setTimeout(() => element.style.opacity = '1', 10);
+  }
+
+  // Show history
   showHistory = () => {
     const history = this.historyController.getHistory();
-    $('#historyContent').empty();
+    const historyContent = document.getElementById('historyContent');
+    historyContent.innerHTML = '';
 
     if (!history || history.length === 0) {
       const template = document.getElementById('no-history-template');
       const clone = template.content.cloneNode(true);
-      $('#historyContent').append(clone);
+      historyContent.appendChild(clone);
       console.log('No history available to display.');
     } else {
       history.forEach((score) => {
         const template = document.getElementById('history-entry-template');
         const clone = template.content.cloneNode(true);
-        const historyLine = $(clone);
+        const historyLine = clone.querySelector('.historyLine');
 
         const date = new Date(parseInt(score.date, 10));
         const dateStr = date.toLocaleDateString('pl-PL', {
@@ -80,38 +96,36 @@ class MainController {
           minute: '2-digit'
         });
         
-        historyLine.find('.date-line').text(dateStr);
-        historyLine.find('.time-line').text(timeStr);
+        historyLine.querySelector('.date-line').textContent = dateStr;
+        historyLine.querySelector('.time-line').textContent = timeStr;
 
-        const ol = historyLine.find('ol');
+        const ol = document.createElement('ol');
         score.results.forEach((result) => {
-          if (result.type === 'success') {
-            const li = $('<li>' + result.time.toFixed(3) + 's</li>');
-            ol.append(li);
-          } else {
-            const li = $('<li>Falstart</li>');
-            ol.append(li);
-          }
+          const li = document.createElement('li');
+          li.textContent = result.type === 'success' ? 
+            `${result.time.toFixed(3)}s` : 'Falstart';
+          ol.appendChild(li);
         });
 
-        historyLine.find('.avg').text(score.avg.toFixed(3));
+        historyLine.querySelector('.avg').textContent = score.avg.toFixed(3);
 
         const encodedScore = this.deepLinking.encodeScore(score);
         const shareUrl = window.location.origin + window.location.pathname + '#!' + btoa(encodedScore);
-        historyLine.find('.copyLink').data('shareUrl', shareUrl);
-        $('#historyContent').append(historyLine);
+        historyLine.querySelector('.copyLink').dataset.shareUrl = shareUrl;
+        historyContent.appendChild(historyLine);
       });
     }
 
-    $('#history').css('display', 'flex');
+    const historySection = document.getElementById('history');
+    historySection.style.display = 'flex';
   }
 
   async copyToClipboard(text) {
     try {
       await navigator.clipboard.writeText(text);
-      $('.copy-feedback').addClass('visible');
+      document.querySelector('.copy-feedback').classList.add('visible');
       setTimeout(() => {
-        $('.copy-feedback').removeClass('visible');
+        document.querySelector('.copy-feedback').classList.remove('visible');
       }, 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
@@ -124,7 +138,7 @@ class MainController {
       console.error('No score data to show.');
       return;
     }
-    $('#savedScore').show();
+    document.getElementById('savedScore').style.display = 'block';
     this.generateScoreTable(score);
 
     if (score.date) {
@@ -138,18 +152,18 @@ class MainController {
         minute: '2-digit'
       };
       const formattedDate = date.toLocaleDateString('pl-PL', options);
-      $('#savedScoreDate').text(formattedDate);
+      document.getElementById('savedScoreDate').textContent = formattedDate;
       console.log('Displaying saved score date:', formattedDate);
     } else {
-      $('#savedScoreDate').text('Nieznana data'); // Fallback text
+      document.getElementById('savedScoreDate').textContent = 'Nieznana data'; // Fallback text
       console.warn('Score date is missing:', score);
     }
 
-    $('.button.play').one('click', this.onStartGameClick);
+    document.querySelector('.button.play').addEventListener('click', this.onStartGameClick, { once: true });
   };
 
   onStartGameClick = () => {
-    $('#savedScore').hide();
+    document.getElementById('savedScore').style.display = 'none';
     this.addDocumentHandler(this.startGame);
   }
 
@@ -157,21 +171,22 @@ class MainController {
     this.round = 1;
     this.resultsArray = [];
     this.beginDate = Date.now();
-    $('#end').hide();
-    $('#intro').fadeOut('fast');
+    document.getElementById('end').style.display = 'none';
+    this.fadeOut(document.getElementById('intro'), 200);
     this.startRound(this.round);
   };
 
   startRound = (round) => {
     this.removeDocumentHandler();
     this.restartRoundAnimation();
-    $('#roundNumber').text(round);
+    document.getElementById('roundNumber').textContent = round;
     this.timeoutHandler = setTimeout(this.showObject, this.getTimeout());
     this.addDocumentHandler(this.falstart);
   };
 
   startNextRound = () => {
-    $('#result, #falstart').fadeOut('fast');
+    this.fadeOut(document.getElementById('result'), 200);
+    this.fadeOut(document.getElementById('falstart'), 200);
     this.round += 1;
     if (this.round > this.options.rounds) {
       this.results();
@@ -186,7 +201,7 @@ class MainController {
     this.historyController.saveScore(score);
     this.deepLinking.saveState(score);
     this.generateScoreTable(score);
-    $('#end').fadeIn('fast'); // Changed from show() to fadeIn() for consistency
+    this.fadeIn(document.getElementById('end'), 'block', 200); // Changed from show() to fadeIn() for consistency
     console.log('Results displayed. Average:', score.avg);
 
     if (score.date) {
@@ -200,15 +215,15 @@ class MainController {
         minute: '2-digit'
       };
       const formattedDate = date.toLocaleDateString('pl-PL', options);
-      $('#endDate').text(formattedDate);
+      document.getElementById('endDate').textContent = formattedDate;
       console.log('Displaying end score date:', formattedDate);
     }
     else {
-      $('#endDate').text('Nieznana data');
+      document.getElementById('endDate').textContent = 'Nieznana data';
       console.warn('End score date is missing:', score);
     }
 
-    $('.button.repeat').one('click', this.backToIntro);
+    document.querySelector('.button.repeat').addEventListener('click', this.backToIntro, { once: true });
   };
 
   computeScore = () => {
@@ -228,7 +243,8 @@ class MainController {
   }
 
   generateScoreTable = (score) => {
-    $('.resultsTable').empty();
+    const resultsTable = document.querySelector('.resultsTable');
+    resultsTable.innerHTML = '';
     const template = document.getElementById('result-item-template');
 
     score.results.forEach((result) => {
@@ -241,19 +257,19 @@ class MainController {
         li.textContent = "Falstart";
       }
 
-      $('.resultsTable').append(clone);
+      resultsTable.appendChild(clone);
     });
 
-    $('.avgTime').text(score.avg);
+    document.querySelector('.avgTime').textContent = score.avg;
     console.log('Generated score table with average:', score.avg);
   }
 
   backToIntro = () => {
     this.removeDocumentHandler();
-    $('#intro').fadeIn('fast', () => {
-      $('#end').hide();
+    this.fadeIn(document.getElementById('intro'), 'block', 200, () => {
+      document.getElementById('end').style.display = 'none';
       // Reset copy feedback state when going back
-      $('.copy-feedback').removeClass('visible');
+      document.querySelector('.copy-feedback').classList.remove('visible');
     });
     this.addDocumentHandler(this.startGame);
   };
@@ -266,29 +282,31 @@ class MainController {
       time: 1
     }
     this.resultsArray.push(result);
-    $('#falstart').fadeIn('fast');
+    this.fadeIn(document.getElementById('falstart'), 'block', 200);
     this.addDocumentHandler(this.startNextRound);
   };
 
   showObject = () => {
     this.removeDocumentHandler();
     this.addDocumentHandler(this.onReaction);
-    const maxLeft = $(window).width() - $('div.ball').outerWidth();
-    const maxTop = $(window).height() - $('div.ball').outerHeight();
+    const ball = document.querySelector('div.ball');
+    const maxLeft = window.innerWidth - ball.offsetWidth;
+    const maxTop = window.innerHeight - ball.offsetHeight;
     const left = this.random(0, maxLeft);
     const top = this.random(0, maxTop);
     const colours = this.getRandomColours(2);
-    $('div.ball').css('left', left);
-    $('div.ball').css('top', top);
-    $('div.ball').css('background', colours[0]);
-    $('div.ball').css('color', colours[1]);
-    $('div.ball').show();
+    ball.style.left = `${left}px`;
+    ball.style.top = `${top}px`;
+    ball.style.background = colours[0];
+    ball.style.color = colours[1];
+    ball.style.display = 'block';
     this.startTime = Date.now();
     console.log('Ball shown at position:', left, top, 'with colors:', colours);
   };
 
   hideObject = () => {
-    $('div.ball').fadeOut('fast', $('div.ball').hide);
+    const ball = document.querySelector('div.ball');
+    this.fadeOut(ball, 200);
     console.log('Ball hidden.');
   };
 
@@ -303,15 +321,16 @@ class MainController {
     }
     this.resultsArray.push(result);
     console.log('Reaction recorded:', reaction, 's.');
-    $('#reactionTime').text(reaction);
-    $('#result').fadeIn('fast');
+    document.getElementById('reactionTime').textContent = reaction;
+    this.fadeIn(document.getElementById('result'), 'block', 200);
     this.addDocumentHandler(this.startNextRound);
   };
 
   restartRoundAnimation = () => {
-    $('#roundName').css('animation-name', 'none');
+    const roundName = document.getElementById('roundName');
+    roundName.style.animationName = 'none';
     setTimeout(() => {
-      $('#roundName').css('animation-name', '');
+      roundName.style.animationName = '';
     }, 4);
     console.log('Round animation restarted.');
   };
@@ -320,13 +339,15 @@ class MainController {
 
   addDocumentHandler = (handler) => {
     this.currentHandler = handler;
-    $(document).one('mousedown.gameHandler keydown.gameHandler', this.documentHandler);
+    document.addEventListener('mousedown', this.documentHandler, { once: true });
+    document.addEventListener('keydown', this.documentHandler, { once: true });
     console.log('Added document handler for:', handler.name);
   };
 
   removeDocumentHandler = () => {
     this.currentHandler = null;
-    $(document).off('mousedown.gameHandler keydown.gameHandler', this.documentHandler);
+    document.removeEventListener('mousedown', this.documentHandler);
+    document.removeEventListener('keydown', this.documentHandler);
     console.log('Removed document handlers.');
   };
 
@@ -359,48 +380,50 @@ class MainController {
 }
 
 // Initialize on DOM ready
-$(() => {
+document.addEventListener('DOMContentLoaded', () => {
   console.log("Hello!");
   const controller = new MainController();
   controller.init();
 
-  // Event handlers using arrow functions
-  $('.button.history').on('click', e => {
-    e.stopPropagation();
-    controller.showHistory();
+  // Event handlers
+  document.querySelectorAll('.button.history').forEach(button => {
+    button.addEventListener('click', e => {
+      e.stopPropagation();
+      controller.showHistory();
+    });
   });
 
-  $('.button.start').on('click', e => {
+  document.querySelector('.button.start').addEventListener('click', e => {
     e.stopPropagation();
     controller.startGame();
   });
 
-  $('.button.share-link').on('click', async (e) => {
+  document.querySelector('.button.share-link').addEventListener('click', async (e) => {
     e.preventDefault();
     e.stopPropagation();
     await controller.copyToClipboard(window.location.href);
   });
 
-  // Update the clear history click handler
-  $('.button.clearHistory').on('click', () => {
+  document.querySelector('.button.clearHistory').addEventListener('click', () => {
     controller.historyController.clearHistory();
-    controller.showHistory(); // This will now handle empty history state
+    controller.showHistory();
     console.log('Clear history button clicked.');
   });
 
-  // Add handler for 'backToStart' button
-  $('.button.backToStart').on('click', () => {
-    $('#history').hide();
-    $('#intro').show();
+  document.querySelector('.button.backToStart').addEventListener('click', () => {
+    document.getElementById('history').style.display = 'none';
+    document.getElementById('intro').style.display = 'block';
     console.log('Back to start button clicked.');
   });
 
-  // Add event handler for 'Copy URL' buttons
-  $(document).on('click', '.button.copyLink', async function (e) {
-    e.preventDefault();
-    const shareUrl = $(this).data('shareUrl');
-    console.log('Copy URL button clicked. URL:', shareUrl);
-    await controller.copyToClipboard(shareUrl);
+  // Event delegation for dynamic copy buttons
+  document.addEventListener('click', async e => {
+    if (e.target.closest('.button.copyLink')) {
+      e.preventDefault();
+      const shareUrl = e.target.closest('.button.copyLink').dataset.shareUrl;
+      console.log('Copy URL button clicked. URL:', shareUrl);
+      await controller.copyToClipboard(shareUrl);
+    }
   });
 });
 

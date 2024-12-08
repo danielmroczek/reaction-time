@@ -31,6 +31,8 @@ body {
   text-align: center;
   color: var(--color-white);
   display: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
 }
 
 #intro { 
