@@ -107,7 +107,7 @@ class MainController {
           ol.appendChild(li);
         });
 
-        historyLine.querySelector('.avg').textContent = score.avg.toFixed(3);
+        historyLine.querySelector('.avg').textContent = `${score.avg.toFixed(3)} s.`;
 
         const encodedScore = this.deepLinking.encodeScore(score);
         const shareUrl = window.location.origin + window.location.pathname + '#!' + btoa(encodedScore);
