@@ -64,7 +64,7 @@ class MainController {
   fadeIn(element, display = 'block', duration = 200) {
     element.style.opacity = '0';
     element.style.display = display;
-    setTimeout(() => element.style.opacity = '1', 10);
+    setTimeout(() => element.style.opacity = '1', duration);
   }
 
   // Show history
@@ -138,8 +138,9 @@ class MainController {
       console.error('No score data to show.');
       return;
     }
-    document.getElementById('savedScore').style.display = 'block';
-    this.generateScoreTable(score);
+    const savedScoreEl = document.getElementById('savedScore');
+    savedScoreEl.style.display = 'block';
+    this.displayScoreTable(score, savedScoreEl); // Updated to use new method
 
     if (score.date) {
       // Set the date in a formatted way
@@ -200,7 +201,7 @@ class MainController {
     const score = this.computeScore();
     this.historyController.saveScore(score);
     this.deepLinking.saveState(score);
-    this.generateScoreTable(score);
+    this.displayScoreTable(score);
     this.fadeIn(document.getElementById('end'), 'block', 200); // Changed from show() to fadeIn() for consistency
     console.log('Results displayed. Average:', score.avg);
 
@@ -242,9 +243,9 @@ class MainController {
     return score;
   }
 
-  generateScoreTable = (score) => {
-    const resultsTable = document.querySelector('.resultsTable');
-    resultsTable.innerHTML = '';
+  createScoreElement = (score) => {
+    const resultsTable = document.createElement('ol');
+    resultsTable.className = 'resultsTable';
     const template = document.getElementById('result-item-template');
 
     score.results.forEach((result) => {
@@ -260,7 +261,17 @@ class MainController {
       resultsTable.appendChild(clone);
     });
 
-    document.querySelector('.avgTime').textContent = score.avg;
+    return {
+      table: resultsTable,
+      avg: score.avg
+    };
+  }
+
+  displayScoreTable = (score, element = document) => {
+    const scoreElement = this.createScoreElement(score);
+    const existingTable = element.querySelector('.resultsTable');
+    existingTable.replaceWith(scoreElement.table);
+    element.querySelector('.avgTime').textContent = scoreElement.avg.toFixed(3);
     console.log('Generated score table with average:', score.avg);
   }
 

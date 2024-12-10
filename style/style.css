@@ -20,14 +20,12 @@
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
-  color: var(--color-text);
   font-size: var(--font-size-base);
 }
 
 .overlay {
   position: absolute;
   inset: 0;
-  background: var(--color-white);
   text-align: center;
   color: var(--color-white);
   display: none;
