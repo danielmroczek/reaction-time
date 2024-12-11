@@ -2,6 +2,10 @@
 
 A web-based application to measure and track your reaction time. Test your reflexes and compare results with previous attempts.
 
+## Demo
+
+Try it live: [Reaction Time Test](https://danielmroczek.github.io/reaction-time/)
+
 ## Features
 
 - Quick and intuitive reaction time testing
